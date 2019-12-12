@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Редактирование пользователя</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        form {
+            width: 40%;
+            margin: 25px auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="edit-user">
+        <h1 class="h4 text-center">Редактирование пользователя</h1>
+        <user-form :info="userInfo"></user-form>
+    </div>
+    <template id="user-form">
+        <form>
+            <div class="form-group" v-for="field in fields" v-bind:key="field.name">
+                <label :for="field.name">{{field.label}}</label>
+                <input :type="field.type || 'text'" class="form-control" :id="field.name" v-model="fieldsValues[field.name]">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Сохранить</button>
+        </form>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+    var userForm = {
+        template: '#user-form',
+        props: {
+            info: {
+                type: Object,
+                required: true
+            }
+        },
+        data: function() {
+            return {
+                fields: [
+                    { label: "Имя пользователя", name: 'username' },
+                    { label: "Фамилия, имя", name: 'name' },
+                    { label: "Email", name: 'email', type: 'email' },
+                    { label: "Сайт", name: 'website' },
+                    { label: "Индекс", name: 'zipcode' },
+                    { label: "Город", name: 'city' },
+                    { label: "Улица", name: 'street' },
+                    { label: "Дом", name: 'suite' }
+                ],
+                fieldsValues: {
+                    username: '',
+                    name: '',
+                    email: '',
+                    website: '',
+                    zipcode: '',
+                    city: '',
+                    street: '',
+                    suite: ''
+                }
+            }
+        },
+        watch: {
+            info: 'setInitValues'
+        },
+        methods: {
+            setInitValues: function() {
+                for (prop in this.fieldsValues) {
+                    this.fieldsValues[prop] = this.info[prop] || this.info.address[prop] || ""
+                }
+            }
+        }
+    }
+    new Vue({
+        el: "#edit-user",
+        components: {
+            'user-form': userForm
+        },
+        data: function() {
+            return {
+                userInfo: {}
+            }
+        },
+        created() {
+            var userId = window.location.search.replace('?id=', '')
+            this.getUserInfo(userId)
+        },
+        methods: {
+            getUserInfo: function(id) {
+                var self = this
+                axios
+                    .get('http://jsonplaceholder.typicode.com/users/' + id)
+                    .then(function(response) {
+                        self.userInfo = response.data
+                    })
+            }
+        }
+    })
+    </script>
+</body>
+</html>

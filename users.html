@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Пользователи</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        body {
+            padding: 25px;
+        }
+        .table {
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <div id="users" v-cloak>
+        <h1 class="h4 text-center">Список пользователей</h1>
+        <users-list :users="users"></users-list>
+    </div>
+    <template id="users-list">
+        <table class="table">
+            <tbody>
+                <tr v-for="user in users" v-bind:key="user.id">
+                    <td>{{user.username}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td><a v-bind:href="user.website">{{user.website}}</a></td>
+                    <td>{{user.address.zipcode}}, {{user.address.city}}, {{user.address.street}} {{user.address.suite}}</td>
+                    <td><a v-bind:href="'/edit-user.html?id=' + user.id" target="_blank">Редактировать</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+    var usersList = {
+        template: '#users-list',
+        props: {
+            users: {
+                type: Array,
+                required: true
+            }
+        }
+    }
+    new Vue({
+        el: "#users",
+        components: {
+            'users-list': usersList
+        },
+        data: function() {
+            return {
+                users: []
+            }
+        },
+        created: function() {
+            this.getUsers()
+        },
+        methods: {
+            getUsers: function() {
+                var self = this
+                axios
+                    .get('http://jsonplaceholder.typicode.com/users')
+                    .then(function(response) {
+                        self.users = response.data
+                    })
+                    .then(function() { console.log('Users are loaded') })
+            }
+        }
+    })
+    </script>
+</body>
+</html>
