@@ -1,4 +1,4 @@
-# cli
+# vue-course
 
 ## Project setup
 ```
