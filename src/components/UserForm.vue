@@ -1,0 +1,161 @@
+<template>
+  <form class="user-form">
+    <div class="form-group">
+      <label for="firstName">Имя</label>
+      <input
+        id="firstName"
+        v-model="user.firstName"
+        type="text"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Фамилия</label>
+      <input
+        id="lastName"
+        v-model="user.lastName"
+        type="text"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <div class="form-check form-check-inline">
+        <label class="form-check-label mr-2" for="firstName">Активен</label>
+        <input
+          id="isActive"
+          v-model="user.isActive"
+          type="checkbox"
+          class="form-check-input"
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="firstName">Баланс</label>
+      <input
+        id="balance"
+        v-model="user.balance"
+        type="text"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Возраст</label>
+      <input
+        id="age"
+        v-model.number="user.age"
+        type="number"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Уровень доступа</label>
+      <select v-model="user.accessLevel" class="form-control">
+        <option value="admin">Админ</option>
+        <option value="user">Пользователь</option>
+        <option value="guest">Гость</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="firstName">Компания</label>
+      <input
+        id="company"
+        v-model="user.company"
+        type="text"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Email</label>
+      <input
+        id="email"
+        v-model="user.email"
+        type="email"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Телефон</label>
+      <input id="phone" v-model="user.phone" type="tel" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Адрес</label>
+      <input
+        id="address"
+        v-model="user.address"
+        type="text"
+        class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">Зарегистрирован</label>
+      <input
+        id="registered"
+        :value="registrationDate"
+        type="date"
+        class="form-control"
+        @input="setRegistrationDate"
+      />
+    </div>
+  </form>
+</template>
+
+<script>
+const deepEql = require("deep-eql");
+export default {
+  name: "UserForm",
+  model: {
+    prop: "initUser"
+  },
+  props: {
+    initUser: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      user: {}
+    };
+  },
+  computed: {
+    registrationDate() {
+      return this.user.registered
+        ? this.user.registered.replace(/(\d\d).(\d\d).(\d\d\d\d)/, "$3-$2-$1")
+        : "";
+    }
+  },
+  watch: {
+    user: {
+      handler() {
+        this.$emit("input", { ...this.user });
+      },
+      deep: true
+    },
+    initUser: {
+      handler: "setUserData",
+      deep: true
+    }
+  },
+  created() {
+    this.setUserData();
+  },
+  methods: {
+    setUserData() {
+      if (!deepEql(this.user, this.initUser)) this.user = { ...this.initUser };
+    },
+    setRegistrationDate(e) {
+      let dateStr = e.target.value.replace(
+        /(\d\d\d\d)-(\d\d)-(\d\d)/,
+        "$3.$2.$1"
+      );
+      this.$set(this.user, "registered", dateStr);
+    }
+  }
+};
+</script>
+<style scoped>
+.user-form {
+  width: 60%;
+  margin: 0 auto;
+}
+</style>
