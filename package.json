@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "api": "json-server --watch db.json",
+    "api": "json-server --watch db.json --port 3000",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -13,6 +13,7 @@
     "bootstrap": "^4.4.1",
     "core-js": "^3.4.3",
     "deep-eql": "^4.0.0",
+    "flatpickr": "^4.6.3",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3"
   },

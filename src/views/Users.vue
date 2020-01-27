@@ -6,9 +6,12 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <template v-else>
+    <template v-else-if="usersCount">
       <p>Всего пользователей: {{ usersCount }}</p>
       <users-viewer :users="users"></users-viewer>
+    </template>
+    <template v-else>
+      <p>{{ message }}</p>
     </template>
   </div>
 </template>
@@ -25,7 +28,8 @@ export default {
   data: function() {
     return {
       users: [],
-      usersAreLoaded: false
+      usersAreLoaded: false,
+      message: ""
     };
   },
   computed: {
@@ -42,10 +46,10 @@ export default {
         .get("http://localhost:3000/users")
         .then(response => {
           this.users = response.data;
-          this.usersAreLoaded = true;
+          if (!this.users.length) this.message = "Пользователи отсутствуют";
         })
-        .then(() => console.log("Users are loaded"))
-        .catch(e => console.error(e));
+        .catch(e => (this.message = "В процессе загрузки произошла ошибка"))
+        .finally(() => (this.usersAreLoaded = true));
     }
   }
 };

@@ -28,8 +28,8 @@ export default {
     saveUser() {
       axios
         .post("http://localhost:3000/users", this.user)
-        .then(() => {
-          this.$router.push("/");
+        .then(response => {
+          this.$router.push("/edit-user/" + response.data.id);
         })
         .catch(e => console.error(e));
     }

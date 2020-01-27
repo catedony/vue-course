@@ -87,13 +87,15 @@
       />
     </div>
     <div class="form-group">
+      <label for="firstName">Описание</label>
+      <textarea id="about" v-model="user.about" class="form-control" />
+    </div>
+    <div class="form-group">
       <label for="firstName">Зарегистрирован</label>
-      <input
+      <DatePicker
         id="registered"
-        :value="registrationDate"
-        type="date"
+        v-model="user.registered"
         class="form-control"
-        @input="setRegistrationDate"
       />
     </div>
   </form>
@@ -101,8 +103,12 @@
 
 <script>
 const deepEql = require("deep-eql");
+import DatePicker from "@/components/DatePicker.vue";
 export default {
   name: "UserForm",
+  components: {
+    DatePicker
+  },
   model: {
     prop: "initUser"
   },
@@ -116,13 +122,6 @@ export default {
     return {
       user: {}
     };
-  },
-  computed: {
-    registrationDate() {
-      return this.user.registered
-        ? this.user.registered.replace(/(\d\d).(\d\d).(\d\d\d\d)/, "$3-$2-$1")
-        : "";
-    }
   },
   watch: {
     user: {
@@ -142,13 +141,6 @@ export default {
   methods: {
     setUserData() {
       if (!deepEql(this.user, this.initUser)) this.user = { ...this.initUser };
-    },
-    setRegistrationDate(e) {
-      let dateStr = e.target.value.replace(
-        /(\d\d\d\d)-(\d\d)-(\d\d)/,
-        "$3.$2.$1"
-      );
-      this.$set(this.user, "registered", dateStr);
     }
   }
 };
