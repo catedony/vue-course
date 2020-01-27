@@ -88,7 +88,7 @@
     </div>
     <div class="form-group">
       <label for="firstName">Описание</label>
-      <textarea id="about" v-model="user.about" class="form-control" />
+      <VueEditor id="about" v-model="user.about" />
     </div>
     <div class="form-group">
       <label for="firstName">Зарегистрирован</label>
@@ -104,10 +104,12 @@
 <script>
 const deepEql = require("deep-eql");
 import DatePicker from "@/components/DatePicker.vue";
+import { VueEditor } from "vue2-editor";
 export default {
   name: "UserForm",
   components: {
-    DatePicker
+    DatePicker,
+    VueEditor
   },
   model: {
     prop: "initUser"
