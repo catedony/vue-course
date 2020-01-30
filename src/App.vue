@@ -18,6 +18,9 @@
           <router-link tag="li" class="nav-item" to="/"
             ><a class="nav-link">Пользователи</a></router-link
           >
+          <router-link tag="li" class="nav-item" to="/contacts"
+            ><a class="nav-link">Контакты</a></router-link
+          >
           <router-link tag="li" class="nav-item" to="/add-user"
             ><a class="nav-link">Добавить</a></router-link
           >

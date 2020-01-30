@@ -1,7 +1,20 @@
 <template>
-  <div>
+  <div class="users-phone-book">
     <rows-on-page-select v-model="rowsOnPage"></rows-on-page-select>
-    <users-list :users="usersToShow"></users-list>
+    <users-list :users="usersToShow">
+      <template v-slot:thead>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+        <th>Email</th>
+      </template>
+      <template v-slot:row="{ user }">
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.email }}</td>
+      </template>
+    </users-list>
     <app-pagination
       v-model="currentPage"
       :items-count="rowsCount"
@@ -15,7 +28,7 @@ import UsersList from "@/components/UsersList.vue";
 import AppPagination from "@/components/AppPagination.vue";
 import RowsOnPageSelect from "@/components/RowsOnPageSelect.vue";
 export default {
-  name: "UsersViewer",
+  name: "UsersPhoneBook",
   components: {
     UsersList,
     AppPagination,
@@ -45,3 +58,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.users-phone-book .table-responsive {
+  border: none;
+}
+</style>
