@@ -6,15 +6,18 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <user-form v-else v-model="user"></user-form>
-    <div class="d-flex justify-content-center my-2">
-      <button type="button" class="btn btn-primary mr-2" @click="saveChanges">
-        Сохранить изменения
-      </button>
-      <button type="button" class="btn btn-danger" @click="removeUser">
-        Удалить пользователя
-      </button>
-    </div>
+    <template v-else-if="user !== null">
+      <user-form v-model="user"></user-form>
+      <div class="d-flex justify-content-center my-2">
+        <button type="button" class="btn btn-primary mr-2" @click="saveChanges">
+          Сохранить изменения
+        </button>
+        <button type="button" class="btn btn-danger" @click="removeUser">
+          Удалить пользователя
+        </button>
+      </div>
+    </template>
+    <p v-else>Не удалось загрузить данные пользователя</p>
   </div>
 </template>
 
@@ -29,7 +32,7 @@ export default {
   },
   data: function() {
     return {
-      user: {},
+      user: null,
       userIsLoaded: false
     };
   },
@@ -49,7 +52,10 @@ export default {
           this.user = response.data;
           this.userIsLoaded = true;
         })
-        .catch(e => console.error(e));
+        .catch(e => {
+          console.log(e);
+          this.userIsLoaded = true;
+        });
     },
     saveChanges() {
       axios
