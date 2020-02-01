@@ -30,3 +30,9 @@
     <router-view />
   </div>
 </template>
+
+<style>
+#nprogress .bar {
+  height: 10px;
+}
+</style>

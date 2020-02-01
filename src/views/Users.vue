@@ -8,7 +8,13 @@
     </div>
     <template v-else-if="usersCount">
       <p>Всего пользователей: {{ usersCount }}</p>
-      <users-viewer :users="users"></users-viewer>
+      <rows-on-page-select v-model="rowsOnPage"></rows-on-page-select>
+      <users-list :users="users"></users-list>
+      <app-pagination
+        v-model="currentPage"
+        :items-count="usersCount"
+        :items-to-show="rowsOnPage"
+      ></app-pagination>
     </template>
     <template v-else>
       <p>{{ message }}</p>
@@ -17,35 +23,49 @@
 </template>
 
 <script>
-import UsersViewer from "@/components/UsersViewer.vue";
+import UsersList from "@/components/UsersList.vue";
+import AppPagination from "@/components/AppPagination.vue";
+import RowsOnPageSelect from "@/components/RowsOnPageSelect.vue";
 import axios from "axios";
 
 export default {
   name: "Users",
   components: {
-    UsersViewer
+    UsersList,
+    AppPagination,
+    RowsOnPageSelect
   },
   data: function() {
     return {
       users: [],
+      usersCount: 0,
       usersAreLoaded: false,
-      message: ""
+      message: "",
+      rowsOnPage: 5,
+      currentPage: 1
     };
   },
-  computed: {
-    usersCount() {
-      return this.users.length;
+  watch: {
+    currentPage() {
+      this.getUsers();
+    },
+    rowsOnPage() {
+      this.getUsers();
     }
   },
-  created: function() {
+  created() {
     this.getUsers();
   },
   methods: {
     getUsers() {
       axios
-        .get("http://localhost:3000/users")
+        .get(
+          `http://localhost:3000/users?_page=${this.currentPage}&_limit=${this.rowsOnPage}`
+        )
         .then(response => {
           this.users = response.data;
+          this.usersCount = +response.headers["x-total-count"];
+
           if (!this.users.length) this.message = "Пользователи отсутствуют";
         })
         .catch(e => (this.message = "В процессе загрузки произошла ошибка"))
