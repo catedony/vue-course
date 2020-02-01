@@ -1,6 +1,12 @@
 <template>
   <form class="user-form">
     <div class="form-group">
+      <img class="img-thumbnail avatar" :src="user.picture" />
+    </div>
+    <div class="form-group">
+      <avatar-uploader v-model="user.picture"></avatar-uploader>
+    </div>
+    <div class="form-group">
       <label for="firstName">Имя</label>
       <input
         id="firstName"
@@ -104,11 +110,13 @@
 <script>
 const deepEql = require("deep-eql");
 import DatePicker from "@/components/DatePicker.vue";
+import AvatarUploader from "@/components/AvatarUploader.vue";
 import { VueEditor } from "vue2-editor";
 export default {
   name: "UserForm",
   components: {
     DatePicker,
+    AvatarUploader,
     VueEditor
   },
   model: {
@@ -151,5 +159,8 @@ export default {
 .user-form {
   width: 60%;
   margin: 0 auto;
+}
+.avatar {
+  max-width: 200px;
 }
 </style>
