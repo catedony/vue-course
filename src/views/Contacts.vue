@@ -49,7 +49,7 @@ export default {
     AppPagination,
     RowsOnPageSelect
   },
-  data: function() {
+  data() {
     return {
       users: [],
       usersCount: 0,

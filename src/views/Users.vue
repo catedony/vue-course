@@ -35,7 +35,7 @@ export default {
     AppPagination,
     RowsOnPageSelect
   },
-  data: function() {
+  data() {
     return {
       users: [],
       usersCount: 0,
@@ -65,7 +65,6 @@ export default {
         .then(response => {
           this.users = response.data;
           this.usersCount = +response.headers["x-total-count"];
-
           if (!this.users.length) this.message = "Пользователи отсутствуют";
         })
         .catch(e => (this.message = "В процессе загрузки произошла ошибка"))
